@@ -1,0 +1,17 @@
+#pragma once
+#include "GUI/Button.h"
+
+class TestButton : public gui::Button {
+private:
+	sf::RectangleShape buttonGfx;
+
+public:
+	TestButton(sf::Vector2u size, sf::IntRect visibleWindow = { {}, {} }, sf::ContextSettings settings = {});
+
+	virtual void click(sf::Vector2f mousePos, sf::Mouse::Button button) override;
+	virtual void releaseClick(sf::Vector2f mousePos, sf::Mouse::Button button) override;
+	virtual void handleHover(sf::Vector2f mousePos) override;
+
+private:
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+};

@@ -3,6 +3,10 @@
 namespace gui {
 
 class Clickable {
+protected:
+	bool attachedToMouse = false;
+	sf::Vector2f dragReference;
+
 public:
 	bool clickEnabled = false;
 	bool draggable = false;
@@ -10,7 +14,8 @@ public:
 	bool dragLockedX = false;
 	bool dragLockedY = false;
 
-	virtual void click(sf::Vector2f mousePos) = 0;
+	virtual void click(sf::Vector2f mousePos, sf::Mouse::Button button) = 0;
+	virtual void releaseClick(sf::Vector2f mousePos, sf::Mouse::Button button) {}
 	virtual void handleHover(sf::Vector2f mousePos) = 0;
 };
 

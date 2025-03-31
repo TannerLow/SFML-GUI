@@ -3,7 +3,7 @@
 namespace gui {
 
 ScrollableDiv::ScrollableDiv(sf::Vector2u size, sf::ContextSettings settings) 
-	: Div(size, settings) {
+	: Div(size) {
 
 	scrollbarBackground.setSize({15, (float)size.y});
 	scrollbarUp.setSize({15, 15});
