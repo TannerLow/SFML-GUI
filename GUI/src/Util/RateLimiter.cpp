@@ -5,14 +5,18 @@ RateLimiter::RateLimiter(int limit) {
 	setLimit(limit);
 }
 
-void RateLimiter::tick() {
+bool RateLimiter::isReady() {
 	if (limit == 0) {
-		return;
+		return true;
 	}
 
-	while (clock.getElapsedTime().asSeconds() < timePerTick);
+	if (clock.getElapsedTime().asSeconds() < timePerTick) {
+		return false;
+	}
 
 	clock.restart();
+
+	return true;
 }
 
 void RateLimiter::setLimit(int limit) {

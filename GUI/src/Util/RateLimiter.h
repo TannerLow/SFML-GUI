@@ -12,6 +12,6 @@ public:
 	RateLimiter(int limit);
 	~RateLimiter() {}
 
-	void tick();
+	bool isReady();
 	void setLimit(int limit);
 };

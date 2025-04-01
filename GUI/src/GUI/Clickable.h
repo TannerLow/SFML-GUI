@@ -1,4 +1,5 @@
 #pragma once
+#include <limits>
 
 namespace gui {
 
@@ -13,6 +14,10 @@ public:
 	bool hoverable = false;
 	bool dragLockedX = false;
 	bool dragLockedY = false;
+	float dragMinX = -1e7;
+	float dragMaxX = 1e7;
+	float dragMinY = -1e7;
+	float dragMaxY = 1e7;
 
 	virtual void click(sf::Vector2f mousePos, sf::Mouse::Button button) = 0;
 	virtual void releaseClick(sf::Vector2f mousePos, sf::Mouse::Button button) {}

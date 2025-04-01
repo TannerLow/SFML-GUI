@@ -3,6 +3,8 @@
 #include "GUI/Button.h"
 
 #include "TestButton.h"
+#include "DraggableButton.h"
+#include "GUI/SubElements/ScrollBarButton.h"
 #include "Util/RateLimiter.h"
 #include <iostream>
 
@@ -49,6 +51,8 @@ int main() {
     subDiv.clickEnabled = true;
     subDiv.draggable = true;
     subDiv.dragLockedX = true;
+    subDiv.dragMinY = 10;
+    subDiv.dragMaxY = 100;
     subDiv.hoverable = true;
     subDiv.elements.push_back(&whiteRect);
     subDiv.elements.push_back(&magentaRectOutline);
@@ -61,6 +65,12 @@ int main() {
     TestButton button({100, 50});
     button.setPosition({400, 300});
 
+    DraggableButton dragButton({100, 50});
+    dragButton.setPosition({1000, 200});
+
+    gui::ScrollBarButton scrollButton({ 50, 20 }, gui::ScrollSide::Horizontal, {400, 1000});
+    scrollButton.setPosition({400, 800});
+
 
     while (window.isOpen()) {
         while (const std::optional event = window.pollEvent()) {
@@ -71,24 +81,33 @@ int main() {
                 sf::Vector2f clickCoords = sf::Vector2f(sf::Mouse::getPosition(window));
                 div.click(clickCoords, mouseButtonPressed->button);
                 button.click(clickCoords, mouseButtonPressed->button);
+                dragButton.click(clickCoords, mouseButtonPressed->button);
+                scrollButton.click(clickCoords, mouseButtonPressed->button);
             }
             else if (const auto* mouseButtonPressed = event->getIf<sf::Event::MouseButtonReleased>()) {
                 sf::Vector2f coords = sf::Vector2f(sf::Mouse::getPosition(window));
                 div.releaseClick(coords, mouseButtonPressed->button);
                 //button.click(clickCoords, mouseButtonPressed->button);
+                dragButton.releaseClick(coords, mouseButtonPressed->button);
+                scrollButton.releaseClick(coords, mouseButtonPressed->button);
             }
         }
 
         if (window.hasFocus()) {
-            div.handleHover(sf::Vector2f(sf::Mouse::getPosition(window)));
-            button.handleHover(sf::Vector2f(sf::Mouse::getPosition(window)));
+            sf::Vector2f mousePos = sf::Vector2f(sf::Mouse::getPosition(window));
+            div.handleHover(mousePos);
+            button.handleHover(mousePos);
+            dragButton.handleHover(mousePos);
+            scrollButton.handleHover(mousePos);
         }
 
-        rateLimiter.tick();
-
-        window.clear();
-        window.draw(div);
-        window.draw(button);
-        window.display();
+        if (rateLimiter.isReady()) {
+            window.clear();
+            window.draw(div);
+            window.draw(button);
+            window.draw(dragButton);
+            window.draw(scrollButton);
+            window.display();
+        }
     }
 }

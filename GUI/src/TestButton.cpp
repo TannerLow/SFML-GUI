@@ -5,7 +5,6 @@ TestButton::TestButton(sf::Vector2u size, sf::IntRect visibleWindow, sf::Context
 	div = new gui::Div(size, visibleWindow, settings);
 	clickEnabled = true;
 	hoverable = true;
-	draggable = true;
 
 	buttonGfx.setSize({ 150, 100 });
 	buttonGfx.setFillColor(sf::Color::Cyan);

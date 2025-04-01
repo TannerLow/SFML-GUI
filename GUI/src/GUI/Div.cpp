@@ -86,10 +86,24 @@ void Div::handleHover(sf::Vector2f mousePos) {
 	if (attachedToMouse) {
 		if (!dragLockedX) {
 			move({ mousePos.x - dragReference.x, 0 });
+			sf::Vector2f pos = getPosition();
+			if (pos.x > dragMaxX) {
+				setPosition({ dragMaxX, pos.y });
+			}
+			else if (pos.x < dragMinX) {
+				setPosition({ dragMinX, pos.y });
+			}
 			dragReference.x = mousePos.x;
 		}
 		if (!dragLockedY) {
 			move({ 0, mousePos.y - dragReference.y });
+			sf::Vector2f pos = getPosition();
+			if (pos.y > dragMaxY) {
+				setPosition({ pos.x, dragMaxY });
+			}
+			else if (pos.y < dragMinY) {
+				setPosition({ pos.x, dragMinY });
+			}
 			dragReference.y = mousePos.y;
 		}
 	}
