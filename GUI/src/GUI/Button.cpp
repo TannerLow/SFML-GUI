@@ -11,6 +11,7 @@ bool Button::containedByDiv(sf::Vector2f point) const {
 		point = getInverseTransform().transformPoint(point);
 		return div->contains(point);
 	}
+	return false;
 }
 
 void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const {

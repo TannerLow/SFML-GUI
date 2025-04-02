@@ -21,13 +21,13 @@ ScrollBarButton::ScrollBarButton(sf::Vector2u size, ScrollSide side, sf::Vector2
 		dragLockedX = true;
 	}
 
-	buttonGfx.setSize({ 150, 100 });
+	buttonGfx.setSize(sf::Vector2f(size));
 	buttonGfx.setFillColor(sf::Color::Cyan);
 	div->elements.push_back(&buttonGfx);
 }
 
 void ScrollBarButton::click(sf::Vector2f mousePos, sf::Mouse::Button button) {
-	if (containedByDiv(mousePos)) {
+	if (clickEnabled and containedByDiv(mousePos)) {
 		printf("Clicked the button\n");
 		isDown = true;
 
@@ -40,11 +40,12 @@ void ScrollBarButton::click(sf::Vector2f mousePos, sf::Mouse::Button button) {
 
 void ScrollBarButton::releaseClick(sf::Vector2f mousePos, sf::Mouse::Button button) {
 	attachedToMouse = false;
+	isDown = false;
 }
 
 void ScrollBarButton::handleHover(sf::Vector2f mousePos) {
 	if (hoverable and div) {
-		if (div->visiblyContains(getInverseTransform().transformPoint(mousePos))) {
+		if (isDown or div->visiblyContains(getInverseTransform().transformPoint(mousePos))) {
 			buttonGfx.setFillColor(sf::Color::Magenta);
 		}
 		else {
@@ -53,13 +54,10 @@ void ScrollBarButton::handleHover(sf::Vector2f mousePos) {
 	}
 
 	if (attachedToMouse) {
-		if (div) {
-			buttonGfx.setFillColor(sf::Color::Magenta);
-		}
-
 		if (!dragLockedX) {
-			if (dragMinX <= mousePos.x and mousePos.x <= dragMaxX) {
-				move({ mousePos.x - dragReference.x, 0 });
+			float delta = mousePos.x - dragReference.x;
+			if ((dragMinX <= mousePos.x or delta < 0) and (mousePos.x <= getHighestPointOfBar() or delta > 0)) {
+				move({ delta, 0 });
 				sf::Vector2f pos = getPosition();
 				if (pos.x > dragMaxX) {
 					setPosition({ dragMaxX, pos.y });
@@ -67,11 +65,11 @@ void ScrollBarButton::handleHover(sf::Vector2f mousePos) {
 				else if (pos.x < dragMinX) {
 					setPosition({ dragMinX, pos.y });
 				}
-				dragReference.x = mousePos.x;
 			}
+			dragReference.x = mousePos.x;
 		}
 		if (!dragLockedY) {
-			if (dragMinY <= mousePos.y and mousePos.y <= dragMaxY) {
+			if (dragMinY <= mousePos.y and mousePos.y <= getHighestPointOfBar()) {
 				move({ 0, mousePos.y - dragReference.y });
 				sf::Vector2f pos = getPosition();
 				if (pos.y > dragMaxY) {
@@ -80,7 +78,43 @@ void ScrollBarButton::handleHover(sf::Vector2f mousePos) {
 				else if (pos.y < dragMinY) {
 					setPosition({ pos.x, dragMinY });
 				}
-				dragReference.y = mousePos.y;
+			}
+			dragReference.y = mousePos.y;
+		}
+	}
+}
+
+void ScrollBarButton::moveBar(ScrollDirection direction) {
+	sf::Vector2f pos = getPosition();
+	if (direction == ScrollDirection::UP_RIGHT) {
+		if (side == ScrollSide::Vertical) {
+			float totalBarLength = dragMaxY - dragMinY;
+			move({0, -totalBarLength * 0.02f});
+			if (getPosition().y < dragMinY) {
+				setPosition({ pos.x, dragMinY });
+			}
+		}
+		else { // Horizontal
+			float totalBarLength = dragMaxX - dragMinX;
+			move({ totalBarLength * 0.02f, 0 });
+			if (getPosition().x > dragMaxX) {
+				setPosition({ dragMaxX, pos.y });
+			}
+		}
+	}
+	else { // DOWN_LEFT
+		if (side == ScrollSide::Vertical) {
+			float totalBarLength = dragMaxY - dragMinY;
+			move({ 0, totalBarLength * 0.02f });
+			if (getPosition().y > dragMaxY) {
+				setPosition({ pos.x, dragMaxY });
+			}
+		}
+		else { // Horizontal
+			float totalBarLength = dragMaxX - dragMinX;
+			move({ -totalBarLength * 0.02f, 0 });
+			if (getPosition().x < dragMinX) {
+				setPosition({ dragMinX, pos.y });
 			}
 		}
 	}
@@ -96,6 +130,25 @@ float ScrollBarButton::getScrollPercentage() const {
 		float percent = (getPosition().y - dragMinY) / (dragMaxY - dragMinY);
 		// NOTE can add snapping to 0/1 here
 		return percent;
+	}
+}
+
+// Lowest Y value
+float ScrollBarButton::getLowestPointOfBar() const {
+	if (side == ScrollSide::Vertical) {
+		return dragMinY;
+	}
+	else {
+		return dragMinX;
+	}
+}
+
+float ScrollBarButton::getHighestPointOfBar() const {
+	if (side == ScrollSide::Vertical) {
+		return dragMaxY + buttonGfx.getSize().y;
+	}
+	else {
+		return dragMaxX + buttonGfx.getSize().x;
 	}
 }
 

@@ -39,6 +39,9 @@
     <ClCompile Include="src\GUI\SubElements\ScrollBarButton.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\GUI\SubElements\ScrollEndButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\GUI\Div.h">
@@ -68,7 +71,10 @@
     <ClInclude Include="src\GUI\SubElements\ScrollBarButton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\GUI\SubElements\ScrollSide.h">
+    <ClInclude Include="src\GUI\SubElements\ScrollEnums.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GUI\ScrollBar.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

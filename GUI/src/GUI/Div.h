@@ -18,6 +18,7 @@ public:
 	virtual void click(sf::Vector2f mousePos, sf::Mouse::Button button) override;
 	virtual void releaseClick(sf::Vector2f mousePos, sf::Mouse::Button button) override;
 	virtual void handleHover(sf::Vector2f mousePos) override;
+	virtual void update() override {}
 	void setVisibleWindow(sf::IntRect window);
 
 private:

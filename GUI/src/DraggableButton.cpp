@@ -66,6 +66,4 @@ void DraggableButton::handleHover(sf::Vector2f mousePos) {
 
 void DraggableButton::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	gui::Button::draw(target, states);
-
-	//states.transform *= getTransform();
 }

@@ -22,6 +22,7 @@ public:
 	virtual void click(sf::Vector2f mousePos, sf::Mouse::Button button) = 0;
 	virtual void releaseClick(sf::Vector2f mousePos, sf::Mouse::Button button) {}
 	virtual void handleHover(sf::Vector2f mousePos) = 0;
+	virtual void update() = 0;
 };
 
 }

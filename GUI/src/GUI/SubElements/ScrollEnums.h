@@ -7,4 +7,9 @@ enum class ScrollSide {
 	Horizontal
 };
 
+enum class ScrollDirection {
+	UP_RIGHT,
+	DOWN_LEFT
+};
+
 }

@@ -160,6 +160,7 @@
     <ClCompile Include="src\GUI\Div.cpp" />
     <ClCompile Include="src\GUI\ScrollableDiv.cpp" />
     <ClCompile Include="src\GUI\SubElements\ScrollBarButton.cpp" />
+    <ClCompile Include="src\GUI\SubElements\ScrollEndButton.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\TestButton.cpp" />
     <ClCompile Include="src\Util\RateLimiter.cpp" />
@@ -170,9 +171,10 @@
     <ClInclude Include="src\GUI\Div.h" />
     <ClInclude Include="src\GUI\Clickable.h" />
     <ClInclude Include="src\GUI\ScrollableDiv.h" />
+    <ClInclude Include="src\GUI\ScrollBar.h" />
     <ClInclude Include="src\GUI\SubElements\ScrollBarButton.h" />
     <ClInclude Include="src\GUI\SubElements\ScrollEndButton.h" />
-    <ClInclude Include="src\GUI\SubElements\ScrollSide.h" />
+    <ClInclude Include="src\GUI\SubElements\ScrollEnums.h" />
     <ClInclude Include="src\TestButton.h" />
     <ClInclude Include="src\Util\RateLimiter.h" />
   </ItemGroup>

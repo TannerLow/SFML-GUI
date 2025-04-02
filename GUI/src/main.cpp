@@ -5,6 +5,7 @@
 #include "TestButton.h"
 #include "DraggableButton.h"
 #include "GUI/SubElements/ScrollBarButton.h"
+#include "GUI/SubElements/ScrollEndButton.h"
 #include "Util/RateLimiter.h"
 #include <iostream>
 
@@ -71,6 +72,12 @@ int main() {
     gui::ScrollBarButton scrollButton({ 50, 20 }, gui::ScrollSide::Horizontal, {400, 1000});
     scrollButton.setPosition({400, 800});
 
+    gui::ScrollEndButton scrollEndButtonLeft({20, 20}, gui::ScrollDirection::DOWN_LEFT, &scrollButton);
+    scrollEndButtonLeft.setPosition({scrollButton.getLowestPointOfBar() - 20, 800});
+
+    gui::ScrollEndButton scrollEndButtonRight({ 20, 20 }, gui::ScrollDirection::UP_RIGHT, &scrollButton);
+    scrollEndButtonRight.setPosition({ scrollButton.getHighestPointOfBar(), 800 });
+
 
     while (window.isOpen()) {
         while (const std::optional event = window.pollEvent()) {
@@ -83,6 +90,8 @@ int main() {
                 button.click(clickCoords, mouseButtonPressed->button);
                 dragButton.click(clickCoords, mouseButtonPressed->button);
                 scrollButton.click(clickCoords, mouseButtonPressed->button);
+                scrollEndButtonLeft.click(clickCoords, mouseButtonPressed->button);
+                scrollEndButtonRight.click(clickCoords, mouseButtonPressed->button);
             }
             else if (const auto* mouseButtonPressed = event->getIf<sf::Event::MouseButtonReleased>()) {
                 sf::Vector2f coords = sf::Vector2f(sf::Mouse::getPosition(window));
@@ -90,6 +99,8 @@ int main() {
                 //button.click(clickCoords, mouseButtonPressed->button);
                 dragButton.releaseClick(coords, mouseButtonPressed->button);
                 scrollButton.releaseClick(coords, mouseButtonPressed->button);
+                scrollEndButtonLeft.releaseClick(coords, mouseButtonPressed->button);
+                scrollEndButtonRight.releaseClick(coords, mouseButtonPressed->button);
             }
         }
 
@@ -99,7 +110,12 @@ int main() {
             button.handleHover(mousePos);
             dragButton.handleHover(mousePos);
             scrollButton.handleHover(mousePos);
+            scrollEndButtonLeft.handleHover(mousePos);
+            scrollEndButtonRight.handleHover(mousePos);
         }
+
+        scrollEndButtonLeft.update();
+        scrollEndButtonRight.update();
 
         if (rateLimiter.isReady()) {
             window.clear();
@@ -107,6 +123,8 @@ int main() {
             window.draw(button);
             window.draw(dragButton);
             window.draw(scrollButton);
+            window.draw(scrollEndButtonRight);
+            window.draw(scrollEndButtonLeft);
             window.display();
         }
     }
