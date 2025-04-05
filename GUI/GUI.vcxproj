@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -158,25 +158,33 @@
     <ClCompile Include="src\DraggableButton.cpp" />
     <ClCompile Include="src\GUI\Button.cpp" />
     <ClCompile Include="src\GUI\Div.cpp" />
+    <ClCompile Include="src\GUI\Font.cpp" />
     <ClCompile Include="src\GUI\ScrollableDiv.cpp" />
     <ClCompile Include="src\GUI\SubElements\ScrollBarButton.cpp" />
     <ClCompile Include="src\GUI\SubElements\ScrollEndButton.cpp" />
+    <ClCompile Include="src\GUI\Text.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\MinecraftUnicodeFont.cpp" />
     <ClCompile Include="src\TestButton.cpp" />
     <ClCompile Include="src\Util\RateLimiter.cpp" />
+    <ClCompile Include="src\Util\VertexHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\DraggableButton.h" />
     <ClInclude Include="src\GUI\Button.h" />
     <ClInclude Include="src\GUI\Div.h" />
     <ClInclude Include="src\GUI\Clickable.h" />
+    <ClInclude Include="src\GUI\Font.h" />
     <ClInclude Include="src\GUI\ScrollableDiv.h" />
     <ClInclude Include="src\GUI\ScrollBar.h" />
     <ClInclude Include="src\GUI\SubElements\ScrollBarButton.h" />
     <ClInclude Include="src\GUI\SubElements\ScrollEndButton.h" />
     <ClInclude Include="src\GUI\SubElements\ScrollEnums.h" />
+    <ClInclude Include="src\GUI\Text.h" />
+    <ClInclude Include="src\MinecraftUnicodeFont.h" />
     <ClInclude Include="src\TestButton.h" />
     <ClInclude Include="src\Util\RateLimiter.h" />
+    <ClInclude Include="src\Util\VertexHelper.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

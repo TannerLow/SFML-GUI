@@ -6,8 +6,11 @@
 #include "DraggableButton.h"
 #include "GUI/SubElements/ScrollBarButton.h"
 #include "GUI/SubElements/ScrollEndButton.h"
+#include "GUI/Text.h"
 #include "Util/RateLimiter.h"
 #include <iostream>
+
+#include <fstream>
 
 int main() {
     RateLimiter rateLimiter(60);
@@ -78,6 +81,32 @@ int main() {
     gui::ScrollEndButton scrollEndButtonRight({ 20, 20 }, gui::ScrollDirection::UP_RIGHT, &scrollButton);
     scrollEndButtonRight.setPosition({ scrollButton.getHighestPointOfBar(), 800 });
 
+    sf::Font font;
+    if (!font.openFromFile("resources/RuneScape-Plain-12.ttf"))
+    {
+        std::cout << "Failed to load resources/RuneScape-Plain-12.ttf font file" << std::endl;
+    }
+    font.setSmooth(false);
+    sf::Text text(font); // a font is required to make a text object
+    // set the string to display
+    text.setString("Welcome to Runescape");
+    // set the character size
+    text.setCharacterSize(72); // in pixels, not points!
+    text.setPosition({ 400, 30 });
+
+    gui::Font minecraftFont;
+    std::map<int, fs::path> imagePaths;
+    imagePaths.emplace(0x00, fs::path("resources/font/unicode_page_00.png"));
+    imagePaths.emplace(0x01, fs::path("resources/font/unicode_page_01.png"));
+    imagePaths.emplace(0x5e, fs::path("resources/font/unicode_page_5e.png"));
+    minecraftFont.load({16, 16}, "resources/font/font_widths.dat", imagePaths, 256);
+    //auto _a = minecractFont.getCharacter('A');
+    //auto _b = minecractFont.getTexture('A');
+    //sf::Sprite s(*_b, _a);
+    gui::Text minecraftText(&minecraftFont);
+    minecraftText.setString(L"I am Steve@@@\x100\x5e00");
+    minecraftText.setScale({ 2, 2 });
+    minecraftText.move({ 100, 30 });
 
     while (window.isOpen()) {
         while (const std::optional event = window.pollEvent()) {
@@ -119,13 +148,90 @@ int main() {
 
         if (rateLimiter.isReady()) {
             window.clear();
-            window.draw(div);
-            window.draw(button);
-            window.draw(dragButton);
+            //window.draw(div);
+            //window.draw(button);
+            //window.draw(dragButton);
             window.draw(scrollButton);
             window.draw(scrollEndButtonRight);
             window.draw(scrollEndButtonLeft);
+            //window.draw(text);
+            //window.draw(s);
+            window.draw(minecraftText);
             window.display();
         }
     }
 }
+
+//void setLower(uint8_t& num, uint8_t fourBits) {
+//    fourBits &= 0x0F;
+//    num &= 0xF0;
+//    num |= fourBits;
+//}
+//
+//void setUpper(uint8_t& num, uint8_t fourBits) {
+//    fourBits &= 0x0F;
+//    fourBits <<= 4;
+//    num &= 0x0F;
+//    num |= fourBits;
+//}
+//
+//bool containsPixel(const sf::Image& img, int row, int col, int subCol) {
+//    sf::Color empty(0, 0, 0, 0);
+//    for (int i = 0; i < 16; i++) {
+//        if (img.getPixel({ col * 16 + subCol, row * 16 + i }) != empty) {
+//            return true;
+//        }
+//    }
+//    return false;
+//}
+//
+//bool createFontWidthDatFile(const std::string& fontPath, const std::string& filepath) {
+//    bool success = true;
+//
+//    std::ofstream file(filepath, std::ios::binary);
+//
+//    if (!file.is_open())
+//        success = false;
+//
+//    sf::Image image;
+//    if (!image.loadFromFile(fontPath))
+//        return false;
+//
+//    for (int i = 0;;) {
+//
+//    }
+//
+//    uint8_t value = 0;
+//    for (int row = 0; row < 256; row++) {
+//        for (int col = 0; col < 256; col++) {
+//            uint8_t value = 0xF0;
+//            // find front
+//            for (int subCol = 0; subCol < 16; subCol++) {
+//                if (containsPixel(image, row, col, subCol)) {
+//                    setUpper(value, (uint8_t)subCol);
+//                    break;
+//                }
+//            }
+//            // find back
+//            for (int subCol = 15; subCol >= 0; subCol--) {
+//                if (containsPixel(image, row, col, subCol)) {
+//                    setLower(value, (uint8_t)subCol);
+//                    break;
+//                }
+//            }
+//
+//            if (row == 0 and col == 32) {
+//                value = 0x07; // make space ' ' half character width
+//            }
+//
+//            file << ((unsigned char)value);
+//        }
+//    }
+//
+//    if (file.bad())
+//        success = false;
+//
+//    file.close();
+//
+//    return success;
+//}
