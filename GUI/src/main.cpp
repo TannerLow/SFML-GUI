@@ -8,14 +8,36 @@
 #include "GUI/SubElements/ScrollEndButton.h"
 #include "GUI/Text.h"
 #include "Util/RateLimiter.h"
+#include "MainMenu.h"
 #include <iostream>
 
 #include <fstream>
 
+std::map<int, fs::path> generateFontImagePaths();
+
 int main() {
+
+    //std::string path = "resources/font";
+    //
+    //for (const auto& entry : fs::directory_iterator(path)) {
+    //    if (fs::is_regular_file(entry)) {
+    //        std::string filename = entry.path().filename().string();
+    //        if (filename[0] == 'u' and filename[1] == 'n' and filename[2] == 'i') {
+    //            char a = filename[13];
+    //            char b = filename[14];
+    //            // {0x00, fs::path("resources/font/unicode_page_00.png")}
+    //            std::cout << "{ 0x" << a << b << ", fs::path(\"resources/font/" << filename << "\") }," << std::endl;
+    //        }
+    //    }
+    //}
+    //return 0;
+
+    ///////////////
+
     RateLimiter rateLimiter(60);
 
     sf::RenderWindow window(sf::VideoMode({ 1600, 900 }), "SFML GUI Driver");
+    return o2::main(window);
 
     sf::Vector2u testRectSize = { 100, 200 };
     sf::Vector2u testRectSizeB = { 50, 50 };
@@ -95,18 +117,16 @@ int main() {
     text.setPosition({ 400, 30 });
 
     gui::Font minecraftFont;
-    std::map<int, fs::path> imagePaths;
-    imagePaths.emplace(0x00, fs::path("resources/font/unicode_page_00.png"));
-    imagePaths.emplace(0x01, fs::path("resources/font/unicode_page_01.png"));
-    imagePaths.emplace(0x5e, fs::path("resources/font/unicode_page_5e.png"));
-    minecraftFont.load({16, 16}, "resources/font/font_widths.dat", imagePaths, 256);
-    //auto _a = minecractFont.getCharacter('A');
-    //auto _b = minecractFont.getTexture('A');
-    //sf::Sprite s(*_b, _a);
+    std::map<int, fs::path> imagePaths = generateFontImagePaths();
+    minecraftFont.load({ 16, 16 }, {16, 16}, "resources/font/font_widths.dat", imagePaths, 256);
+
     gui::Text minecraftText(&minecraftFont);
-    minecraftText.setString(L"I am Steve@@@\x100\x5e00");
-    minecraftText.setScale({ 2, 2 });
-    minecraftText.move({ 100, 30 });
+    minecraftText.setString(L"I am Steve@@@\n123456790-=\x100\x5e00");
+    //minecraftText.setScale({ 1, 1 });
+    minecraftText.move({ 50, 30 });
+    minecraftText.setBound(50);
+
+    div.elements.push_back(&minecraftText);
 
     while (window.isOpen()) {
         while (const std::optional event = window.pollEvent()) {
@@ -148,7 +168,7 @@ int main() {
 
         if (rateLimiter.isReady()) {
             window.clear();
-            //window.draw(div);
+            window.draw(div);
             //window.draw(button);
             //window.draw(dragButton);
             window.draw(scrollButton);
@@ -156,7 +176,7 @@ int main() {
             window.draw(scrollEndButtonLeft);
             //window.draw(text);
             //window.draw(s);
-            window.draw(minecraftText);
+            //window.draw(minecraftText);
             window.display();
         }
     }

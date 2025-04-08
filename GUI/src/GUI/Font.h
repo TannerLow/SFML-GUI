@@ -18,6 +18,7 @@ protected:
 	std::map<int, sf::Texture*> textures;
 	std::map<int, fs::path> imagePaths;
 	sf::Vector2u charSize;
+	sf::Vector2u charsPerImageDimension;
 	std::vector<uint8_t> charWidths;
 	bool isLoaded = false;
 	sf::Image noImage;
@@ -28,17 +29,16 @@ public:
 
 	bool load(
 		const sf::Vector2u charSize,
+		const sf::Vector2u charsPerImageDimension,
 		const fs::path& fontWidthFile,
 		std::map<int, fs::path> imagePaths,
 		unsigned int charactersPerImage
 	);
+
+	// assumes characters can only have a max width of 16
 	const sf::IntRect getCharacter(unsigned int code) const;
-	// const sf::Image& getImage(unsigned int code);
 	const sf::Texture* getTexture(unsigned int code);
 	int numberOfCharactersPerTexture() const;
-
-protected:
-	// const sf::Image& loadImage(int id);
 };
 
 }

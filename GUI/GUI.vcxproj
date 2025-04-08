@@ -164,6 +164,9 @@
     <ClCompile Include="src\GUI\SubElements\ScrollEndButton.cpp" />
     <ClCompile Include="src\GUI\Text.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\MainMenu.cpp" />
+    <ClCompile Include="src\MainMenu\ExpandScoreStatsButton.cpp" />
+    <ClCompile Include="src\MainMenu\ScoreStats.cpp" />
     <ClCompile Include="src\MinecraftUnicodeFont.cpp" />
     <ClCompile Include="src\TestButton.cpp" />
     <ClCompile Include="src\Util\RateLimiter.cpp" />
@@ -181,6 +184,11 @@
     <ClInclude Include="src\GUI\SubElements\ScrollEndButton.h" />
     <ClInclude Include="src\GUI\SubElements\ScrollEnums.h" />
     <ClInclude Include="src\GUI\Text.h" />
+    <ClInclude Include="src\GUI\TextBox.h" />
+    <ClInclude Include="src\MainMenu.h" />
+    <ClInclude Include="src\MainMenu\ExpandScoreStatsButton.h" />
+    <ClInclude Include="src\MainMenu\ScoreStats.h" />
+    <ClInclude Include="src\MainMenu\SlideDirection.h" />
     <ClInclude Include="src\MinecraftUnicodeFont.h" />
     <ClInclude Include="src\TestButton.h" />
     <ClInclude Include="src\Util\RateLimiter.h" />

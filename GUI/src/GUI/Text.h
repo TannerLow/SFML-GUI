@@ -14,19 +14,26 @@ protected:
 		size_t charCount = 0;
 	};
 
-	Font* font;
+	Font* font = nullptr;
 	sf::String text;
 	std::unordered_map<int, VertexArrayInfo> vertexArrays;
+	float lineSpacing = 2;
+	float boundLine = 0;
+	sf::FloatRect boundingBox;
 
 public:
+	Text() {}
 	Text(Font* font) : font(font) {}
 
 	void setString(sf::String text);
+	void setBound(float boundLine);
+	sf::FloatRect getBoundingBox() const;
+	void setFont(Font* font);
 
 protected: 
 	// void renderWithTextureUpdates(); Maybe some optimization I can do if I need to update text colors without changing positions or texCoords
 	void render();
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };
 
 }

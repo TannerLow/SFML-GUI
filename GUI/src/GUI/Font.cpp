@@ -6,10 +6,13 @@ namespace gui {
 
 bool Font::load(
 	const sf::Vector2u charSize,
+	const sf::Vector2u charsPerImageDimension,
 	const fs::path& fontWidthFile,
 	std::map<int, fs::path> imagePaths,
 	unsigned int charactersPerImage
 ) {
+	this->charSize = charSize;
+	this->charsPerImageDimension = charsPerImageDimension;
 	this->imagePaths = imagePaths;
 	this->charactersPerImage = charactersPerImage;
 
@@ -59,7 +62,10 @@ const sf::IntRect Font::getCharacter(unsigned int code) const {
 	code %= charactersPerImage;
 	int right = charWidth & 0x0F;
 	int left = ((charWidth & 0xF0) >> 4) & 0x0F;
-	return { {(int)(code % 16 * 16) + left, (int)(code / 16 * 16)}, {right - left + 1, 16}};
+	return { 
+		{(int)(code % charsPerImageDimension.x * charSize.x) + left, (int)(code / charsPerImageDimension.y * charSize.y)}, 
+		{right - left + 1, (int)charSize.y}
+	};
 }
 
 const sf::Texture* Font::getTexture(unsigned int code) {

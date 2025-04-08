@@ -10,7 +10,13 @@ private:
 	ScrollSide side;
 
 public:
-	ScrollBarButton(sf::Vector2u size, ScrollSide side, sf::Vector2f bounds, sf::IntRect visibleWindow = { {}, {} }, sf::ContextSettings settings = {});
+	ScrollBarButton(
+		sf::Vector2u size, 
+		ScrollSide side, 
+		sf::Vector2f bounds, 
+		sf::IntRect visibleWindow = { {}, {} }, 
+		sf::ContextSettings settings = {}
+	);
 
 	virtual void click(sf::Vector2f mousePos, sf::Mouse::Button button) override;
 	virtual void releaseClick(sf::Vector2f mousePos, sf::Mouse::Button button) override;

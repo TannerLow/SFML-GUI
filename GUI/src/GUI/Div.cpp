@@ -72,7 +72,7 @@ void Div::handleHover(sf::Vector2f mousePos) {
 		sf::FloatRect visibleWindow = getVisibleWindow();
 		
 		if (visibleWindow.contains(relativeMousePos)) {
-			printf("Hovering over Div at relative coords: %.2f %.2f\n", relativeMousePos.x, relativeMousePos.y);
+			//printf("Hovering over Div at relative coords: %.2f %.2f\n", relativeMousePos.x, relativeMousePos.y);
 		}
 
 		for (auto& element : elements) {
