@@ -4,8 +4,13 @@
 namespace gui {
 
 Div::Div(sf::Vector2u size, sf::IntRect visibleWindow, sf::ContextSettings settings) {
+	create(size, visibleWindow, settings);
+}
+
+bool Div::create(sf::Vector2u size, sf::IntRect visibleWindow, sf::ContextSettings settings) {
 	if (!renderTexture.resize(size, settings)) {
 		printf("Failed to create RenderTexture for Div\n");
+		return false;
 	}
 
 	if (visibleWindow.size.x == 0 and visibleWindow.size.y == 0) {
@@ -14,6 +19,8 @@ Div::Div(sf::Vector2u size, sf::IntRect visibleWindow, sf::ContextSettings setti
 	else {
 		setVisibleWindow(visibleWindow);
 	}
+
+	return true;
 }
 
 sf::FloatRect Div::getVisibleWindow() const {
@@ -34,10 +41,10 @@ bool Div::visiblyContains(sf::Vector2f point) const {
 
 void Div::click(sf::Vector2f mousePos, sf::Mouse::Button button) {
 	if (clickEnabled) {
-		if (contains(mousePos)) {
+		if (contains(mousePos) or outOfBoundsClicking) {
 			sf::Vector2f relativeMousePos = getInverseTransform().transformPoint(mousePos);
 			sf::FloatRect visibleWindow = getVisibleWindow();
-			if (visibleWindow.contains(relativeMousePos)) {
+			if (outOfBoundsClicking or visibleWindow.contains(relativeMousePos)) {
 				printf("Clicked Div at relative coords: %.2f %.2f\n", relativeMousePos.x, relativeMousePos.y);
 				if (draggable) {
 					attachedToMouse = true;
@@ -71,9 +78,9 @@ void Div::handleHover(sf::Vector2f mousePos) {
 		sf::Vector2f relativeMousePos = getInverseTransform().transformPoint(mousePos);
 		sf::FloatRect visibleWindow = getVisibleWindow();
 		
-		if (visibleWindow.contains(relativeMousePos)) {
-			//printf("Hovering over Div at relative coords: %.2f %.2f\n", relativeMousePos.x, relativeMousePos.y);
-		}
+		//if (visibleWindow.contains(relativeMousePos)) {
+		//	//printf("Hovering over Div at relative coords: %.2f %.2f\n", relativeMousePos.x, relativeMousePos.y);
+		//}
 
 		for (auto& element : elements) {
 			Clickable* clickable = dynamic_cast<Clickable*>(element);
@@ -113,6 +120,10 @@ void Div::setVisibleWindow(sf::IntRect window) {
 	sf::View view = renderTexture.getView();
 	view.setScissor({ sf::Vector2f(window.position).componentWiseDiv(view.getSize()), sf::Vector2f(window.size).componentWiseDiv(view.getSize()) });
 	renderTexture.setView(view);
+}
+
+void Div::toggleOutOfBoundsClicking(bool enabled) {
+	outOfBoundsClicking = enabled;
 }
 
 void Div::draw(sf::RenderTarget& target, sf::RenderStates states) const {

@@ -87,4 +87,8 @@ sf::FloatRect Text::getBoundingBox() const {
 	return getTransform().transformRect(boundingBox);
 }
 
+sf::Vector2f Text::getCenter() const {
+	return getBoundingBox().size / 2.f;
+}
+
 }

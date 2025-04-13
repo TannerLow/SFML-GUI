@@ -21,14 +21,12 @@ protected:
 	std::array<gui::Text, 51> scoreTexts;
 	sf::RectangleShape scoreStatsBackground;
 	ExpandScoreStatsButton expandButton;
-	SlideDirection slideDirection = SlideDirection::STATIONARY;
 	RateLimiter slideRateLimiter;
 	int bottomMostScoreIndex = 0;
 
 public:
 	ScoreStats(
-		gui::Div* parentDiv, 
-		gui::Font* font, 
+		gui::Div* parentDiv,
 		sf::Vector2u size, 
 		sf::IntRect visibleWindow = { {}, {} }, 
 		sf::ContextSettings settings = {}
@@ -36,8 +34,6 @@ public:
 
 	void loadScores(ScoreData scoreData);
 	virtual void update() override;
-	void setSlideDirection(SlideDirection direction);
-	virtual void click(sf::Vector2f mousePos, sf::Mouse::Button button) override;
 	virtual void scroll(float delta) override;
 
 protected:

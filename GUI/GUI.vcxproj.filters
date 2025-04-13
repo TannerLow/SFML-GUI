@@ -21,7 +21,7 @@
     <ClCompile Include="src\GUI\Div.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\GUI\ScrollableDiv.cpp">
+    <ClCompile Include="src\GUI\_ScrollableDiv.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\GUI\Button.cpp">
@@ -63,6 +63,24 @@
     <ClCompile Include="src\MainMenu\ScoreStats.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\MainMenu\MapInfoDiv.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MainMenu\SearchBar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MainMenu\KeyModeDropDownButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MainMenu\KeyModeDropDownOptions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MainMenu\MainMenuGlobals.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Util\KeyManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\GUI\Div.h">
@@ -77,7 +95,7 @@
     <ClInclude Include="src\Util\RateLimiter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\GUI\ScrollableDiv.h">
+    <ClInclude Include="src\GUI\_ScrollableDiv.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\TestButton.h">
@@ -95,9 +113,6 @@
     <ClInclude Include="src\GUI\SubElements\ScrollEnums.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\GUI\ScrollBar.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\MinecraftUnicodeFont.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -110,9 +125,6 @@
     <ClInclude Include="src\Util\VertexHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\GUI\TextBox.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\MainMenu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -123,6 +135,33 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\MainMenu\SlideDirection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MainMenu\MapInfoDiv.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MainMenu\MapInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MainMenu\SearchBar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MainMenu\MainMenuGlobals.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MainMenu\KeyModeDropDownButton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MainMenu\KeyModeDropDownOptions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GUI\ButtonBacking.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MainMenu\KeyModes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Util\KeyManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

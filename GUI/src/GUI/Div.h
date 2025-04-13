@@ -9,10 +9,12 @@ class Div : public sf::Drawable, public sf::Transformable, public Clickable {
 public:
 	mutable sf::RenderTexture renderTexture;
 	std::vector<sf::Drawable*> elements;
+	bool outOfBoundsClicking = false;
 
 public:
 	Div(sf::Vector2u size, sf::IntRect visibleWindow = { {}, {} }, sf::ContextSettings settings = {});
 
+	bool create(sf::Vector2u size, sf::IntRect visibleWindow, sf::ContextSettings settings);
 	bool contains(sf::Vector2f point) const;
 	bool visiblyContains(sf::Vector2f point) const;
 	virtual void click(sf::Vector2f mousePos, sf::Mouse::Button button) override;
@@ -20,6 +22,7 @@ public:
 	virtual void handleHover(sf::Vector2f mousePos) override;
 	virtual void update() override {}
 	void setVisibleWindow(sf::IntRect window);
+	void toggleOutOfBoundsClicking(bool enabled);
 
 private:
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

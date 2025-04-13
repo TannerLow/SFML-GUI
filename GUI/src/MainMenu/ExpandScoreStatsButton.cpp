@@ -17,6 +17,12 @@ void ExpandScoreStatsButton::click(sf::Vector2f mousePos, sf::Mouse::Button butt
 	if (containedByDiv(mousePos)) {
 		isDown = !isDown;
 		printf("Clicked ExpandMapInfoButton at relative coords: %.2f %.2f\n", mousePos.x, mousePos.y);
+		if (isDown) {
+			slideDirection = SlideDirection::UP;
+		}
+		else {
+			slideDirection = SlideDirection::DOWN;
+		}
 	}
 }
 

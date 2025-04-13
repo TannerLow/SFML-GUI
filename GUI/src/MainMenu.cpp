@@ -4,6 +4,10 @@
 #include "GUI/Div.h"
 #include "MainMenu/ExpandScoreStatsButton.h"
 #include "MainMenu/ScoreStats.h"
+#include "MainMenu/MapInfoDiv.h"
+#include "MainMenu/SearchBar.h"
+#include "MainMenu/KeyModeDropDownButton.h"
+#include "MainMenu/MainMenuGlobals.h"
 
 #include <stdio.h>
 #include <iostream>
@@ -43,6 +47,7 @@ int o2::main(sf::RenderWindow& window) {
 
     gui::Font minecraftFont;
     minecraftFont.load({ 16, 16 }, { 16, 16 }, "resources/font/font_widths.dat", generateFontImagePaths(), 256);
+    o2::minecraftFont = &minecraftFont;
 
     o2::ScoreStats::ScoreData testScoreData;
     testScoreData.topScore = "#1 | 999,999,999,999 | 100.0%";
@@ -50,17 +55,22 @@ int o2::main(sf::RenderWindow& window) {
     testScoreData.scores.push_back("#3 | 999,999,999,997 | 99.99%");
     testScoreData.scores.push_back("#4 | 999,999,999,996 | 99.99%");
     testScoreData.scores.push_back("#5 |               1 | 0.00%");
-    testScoreData.scores.push_back("#5 |               1 | 0.00%");
-    testScoreData.scores.push_back("#5 |               1 | 0.00%");
-    testScoreData.scores.push_back("#5 |               1 | 0.00%");
-    testScoreData.scores.push_back("#5 |               1 | 0.00%");
-    testScoreData.scores.push_back("#5 |               1 | 0.00%");
-    testScoreData.scores.push_back("#5 |               1 | 0.00%");
-    testScoreData.scores.push_back("#5 |               1 | 0.00%");
-    testScoreData.scores.push_back("#5 |               1 | 0.00%");
-    testScoreData.scores.push_back("#5 |               1 | 0.00%");
-    testScoreData.scores.push_back("#5 |               2 | 0.00%");
-    testScoreData.scores.push_back("#5 |               3 | 0.00%");
+    testScoreData.scores.push_back("#6 |               1 | 0.00%");
+    testScoreData.scores.push_back("#7 |               1 | 0.00%");
+    testScoreData.scores.push_back("#8 |               1 | 0.00%");
+    testScoreData.scores.push_back("#9 |               1 | 0.00%");
+    testScoreData.scores.push_back("#10 |               1 | 0.00%");
+    testScoreData.scores.push_back("#11 |               1 | 0.00%");
+    testScoreData.scores.push_back("#12 |               1 | 0.00%");
+    testScoreData.scores.push_back("#13 |               1 | 0.00%");
+    testScoreData.scores.push_back("#14 |               1 | 0.00%");
+    testScoreData.scores.push_back("#15 |               2 | 0.00%");
+    testScoreData.scores.push_back("#16 |               3 | 0.00%");
+
+    o2::MapInfo mapInfo;
+    mapInfo.songName = "Everything will freeze";
+    mapInfo.artist = "UNDEAD CORPORATION";
+    mapInfo.diffName = "O2Craft Excruciating Lvl 250";
 
     // Create objects
     /////////////////////////// MAP PREVIEW /////////////////////////// (0.025, 0.025) (0.45, 0.45)
@@ -74,7 +84,7 @@ int o2::main(sf::RenderWindow& window) {
 
     gui::Div previewDiv({ 864, 486 });
 
-    o2::ScoreStats scoreStatsDiv(&previewDiv, &minecraftFont, { 864, 1836 });
+    o2::ScoreStats scoreStatsDiv(&previewDiv, { 864, 1836 });
     scoreStatsDiv.setPosition({0, 486 - 40});
     scoreStatsDiv.loadScores(testScoreData);
 
@@ -85,13 +95,10 @@ int o2::main(sf::RenderWindow& window) {
     previewDiv.elements.push_back(&scoreStatsDiv);
 
     /////////////////////////// MAP INFO /////////////////////////// (0.025, 0.525) (0.45, 0.10)
-    sf::RectangleShape mapInfoBackground({ 864, 108 });
-    mapInfoBackground.setFillColor(sf::Color::Black);
+    o2::MapInfoDiv mapInfoDiv({ 864, 108 });
+    mapInfoDiv.setPosition({ 48, 567 });
 
-    gui::Div mapInfoDiv({ 864, 108});
-    mapInfoDiv.setPosition({48, 567});
-
-    mapInfoDiv.elements.push_back(&mapInfoBackground);
+    mapInfoDiv.setMapInfo(mapInfo);
 
     /////////////////////////// BUTTON PANEL /////////////////////////// (0.025, 0.65) (0.2125, 0.325)
     sf::RectangleShape buttonPanelBackground({ 408, 351 });
@@ -102,7 +109,7 @@ int o2::main(sf::RenderWindow& window) {
 
     buttonPanelDiv.elements.push_back(&buttonPanelBackground);
 
-    /////////////////////////// BUTTON PANEL /////////////////////////// (0.275, 0.65) (0.2125, 0.325)
+    /////////////////////////// LOADOUT PANEL /////////////////////////// (0.275, 0.65) (0.2125, 0.325)
     sf::RectangleShape loadoutBackground({ 408, 351 });
     loadoutBackground.setFillColor(sf::Color::Black);
 
@@ -121,13 +128,19 @@ int o2::main(sf::RenderWindow& window) {
     songSelectDiv.elements.push_back(&songSelectBackground);
 
     /////////////////////////// SEARCH BAR /////////////////////////// (0.5, 0.025) (0.475, 0.05)
-    sf::RectangleShape searchBarBackground({ 912, 54 });
-    searchBarBackground.setFillColor(sf::Color(64, 64, 64));
+    //sf::RectangleShape searchBarBackground({ 912, 54 });
+    //searchBarBackground.setFillColor(sf::Color(64, 64, 64));
 
-    gui::Div searchBarDiv({ 912, 54 });
-    searchBarDiv.setPosition({ 960, 27 });
+    //gui::Div searchBarDiv({ 912, 54 });
+    //searchBarDiv.setPosition({ 960, 27 });
 
-    searchBarDiv.elements.push_back(&searchBarBackground);
+    //searchBarDiv.elements.push_back(&searchBarBackground);
+
+    o2::SearchBar searchBar({ 912, 54 });
+    searchBar.setPosition({ 960, 27 });
+    
+    o2::KeyModeDropDownButton keyModeSelector({ 100, 54 });
+    keyModeSelector.setPosition({960 + 912 - 100, 27});
 
     while (window.isOpen()) {
         while (const std::optional event = window.pollEvent()) {
@@ -138,10 +151,14 @@ int o2::main(sf::RenderWindow& window) {
                 sf::Vector2f clickCoords = window.mapPixelToCoords(sf::Mouse::getPosition(window));
                 // clicks
                 previewDiv.click(clickCoords, mouseButtonPressed->button);
+                searchBar.click(clickCoords, mouseButtonPressed->button);
+                keyModeSelector.click(clickCoords, mouseButtonPressed->button);
             }
-            else if (const auto* mouseButtonPressed = event->getIf<sf::Event::MouseButtonReleased>()) {
+            else if (const auto* mouseButtonReleased = event->getIf<sf::Event::MouseButtonReleased>()) {
                 sf::Vector2f coords = sf::Vector2f(sf::Mouse::getPosition(window));
                 // releaseClicks
+                searchBar.releaseClick(coords, mouseButtonReleased->button);
+                keyModeSelector.releaseClick(coords, mouseButtonReleased->button);
             }
             else if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>()) {
                 if (keyPressed->scancode == sf::Keyboard::Scan::Escape) {
@@ -150,17 +167,25 @@ int o2::main(sf::RenderWindow& window) {
             }
             else if (const auto* mouseWheelScrolled = event->getIf<sf::Event::MouseWheelScrolled>()) {
                 scoreStatsDiv.scroll(mouseWheelScrolled->delta);
-                std::cout << "scrolled " << mouseWheelScrolled->delta << std::endl;
             }
         }
 
         if (window.hasFocus()) {
             sf::Vector2f mousePos = sf::Vector2f(sf::Mouse::getPosition(window));
-            // handles
+            // hovers
+            for (const auto globalDiv : globalDivs) {
+                if (globalDiv != nullptr) {
+                    globalDiv->handleHover(mousePos);
+                }
+            }
+            searchBar.handleHover(mousePos);
+            keyModeSelector.handleHover(mousePos);
         }
 
         // updates
         scoreStatsDiv.update();
+        searchBar.setKeyMode(keyModeSelector.getKeyMode());
+        searchBar.update();
 
         if (fpsLimiter.isReady()) {
             window.clear();
@@ -170,10 +195,19 @@ int o2::main(sf::RenderWindow& window) {
             window.draw(buttonPanelDiv);
             window.draw(loadoutDiv);
             window.draw(songSelectDiv);
-            window.draw(searchBarDiv);
+            //window.draw(searchBarDiv);
+            window.draw(searchBar);
+            window.draw(keyModeSelector);
+            for (const auto globalDiv : globalDivs) {
+                if (globalDiv != nullptr) {
+                    window.draw(*globalDiv);
+                }
+            }
             window.display();
         }
     }
+
+    return EXIT_SUCCESS;
 }
 
 std::map<int, fs::path> generateFontImagePaths() {

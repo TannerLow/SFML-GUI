@@ -28,6 +28,7 @@ public:
 	void setString(sf::String text);
 	void setBound(float boundLine);
 	sf::FloatRect getBoundingBox() const;
+	sf::Vector2f getCenter() const;
 	void setFont(Font* font);
 
 protected: 

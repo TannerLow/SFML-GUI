@@ -1,12 +1,16 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "../GUI/Button.h"
+#include "SlideDirection.h"
 
 namespace o2 {
 
 class ExpandScoreStatsButton : public gui::Button {
 protected:
 	sf::RectangleShape buttonGfx;
+
+public:
+	SlideDirection slideDirection;
 
 public:
 	ExpandScoreStatsButton();

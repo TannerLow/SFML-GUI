@@ -21,9 +21,9 @@ public:
 
 	virtual void click(sf::Vector2f mousePos, sf::Mouse::Button button) = 0;
 	virtual void releaseClick(sf::Vector2f mousePos, sf::Mouse::Button button) {}
-	virtual void handleHover(sf::Vector2f mousePos) = 0;
+	virtual void handleHover(sf::Vector2f mousePos) {}
 	virtual void scroll(float delta) {};
-	virtual void update() = 0;
+	virtual void update() {}
 };
 
 }

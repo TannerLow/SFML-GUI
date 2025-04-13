@@ -1,12 +1,12 @@
 #include "ScoreStats.h"
+#include "MainMenuGlobals.h"
 
 #include <iostream>
 
 namespace o2 {
 
 ScoreStats::ScoreStats(
-	gui::Div* parentDiv, 
-	gui::Font* font, 
+	gui::Div* parentDiv,
 	sf::Vector2u size, 
 	sf::IntRect visibleWindow, 
 	sf::ContextSettings settings
@@ -23,7 +23,7 @@ ScoreStats::ScoreStats(
 
 
 	for (int i = 0; i < 51; i++) {
-		scoreTexts[i].setFont(font);
+		scoreTexts[i].setFont(minecraftFont);
 		scoreTexts[i].setScale({ 2, 2 });
 		elements.push_back(&scoreTexts[i]);
 	}
@@ -55,33 +55,23 @@ void ScoreStats::update() {
 	if (slideRateLimiter.isReady()) {
 		slide();
 	}
-}
 
-void ScoreStats::click(sf::Vector2f mousePos, sf::Mouse::Button button) {
-	gui::Div::click(mousePos, button);
-
-	if (clickEnabled) {
-		if (contains(mousePos)) {
-			sf::Vector2f relativeMousePos = getInverseTransform().transformPoint(mousePos);
-			if (expandButton.div->contains(relativeMousePos)) {
-				if (expandButton.isDepressed()) {
-					setSlideDirection(SlideDirection::UP);
-				}
-				else {
-					setSlideDirection(SlideDirection::DOWN);
-				}
-			}
-		}
+	float yPos = getPosition().y;
+	if (yPos < 0) {
+		expandButton.setPosition({0, -yPos});
+	}
+	else {
+		expandButton.setPosition({ 0, 0 });
 	}
 }
 
 void ScoreStats::scroll(float delta) {
 	std::cout << "scrolled div " << delta << std::endl;
 	if (delta > 0) { // up
-		if (getPosition().y < 0) {
+		if (getPosition().y < (486 - 40)) {
 			move({ 0, 10 });
-			if (getPosition().y > 0) {
-				setPosition({ 0, 0 });
+			if (getPosition().y > (486 - 40)) {
+				setPosition({ 0, (486 - 40) });
 			}
 		}
 	}
@@ -96,24 +86,24 @@ void ScoreStats::scroll(float delta) {
 	}
 }
 
-void ScoreStats::setSlideDirection(SlideDirection direction) {
-	slideDirection = direction;
-}
+//void ScoreStats::setSlideDirection(SlideDirection direction) {
+//	slideDirection = direction;
+//}
 
 void ScoreStats::slide() {
-	if (slideDirection != SlideDirection::STATIONARY) {
-		if (slideDirection == SlideDirection::UP) {
+	if (expandButton.slideDirection != SlideDirection::STATIONARY) {
+		if (expandButton.slideDirection == SlideDirection::UP) {
 			move({ 0, -1 });
 			if (getPosition().y < 0) {
 				setPosition({ 0, 0 });
-				slideDirection = SlideDirection::STATIONARY;
+				expandButton.slideDirection = SlideDirection::STATIONARY;
 			}
 		}
 		else {
 			move({ 0, 1 });
 			if (getPosition().y > (486 - 40)) {
 				setPosition({ 0, (486 - 40) });
-				slideDirection = SlideDirection::STATIONARY;
+				expandButton.slideDirection = SlideDirection::STATIONARY;
 			}
 		}
 	}
