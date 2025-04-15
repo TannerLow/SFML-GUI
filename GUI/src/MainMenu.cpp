@@ -8,6 +8,9 @@
 #include "MainMenu/SearchBar.h"
 #include "MainMenu/KeyModeDropDownButton.h"
 #include "MainMenu/MainMenuGlobals.h"
+#include "MainMenu/ToggleButton.h"
+#include "MainMenu/RateButton.h"
+#include "MainMenu/LoadoutDiv.h"
 
 #include <stdio.h>
 #include <iostream>
@@ -21,7 +24,7 @@ int o2::main(sf::RenderWindow& window) {
     auto x = sf::VideoMode::getFullscreenModes();
     sf::VideoMode fullscreenMode = sf::VideoMode::getFullscreenModes()[0]; // 12 for 1280x720
     sf::Vector2f desiredSize = {1920, 1080};
-    window.create(fullscreenMode, "SFML GUI Driver");// , sf::State::Fullscreen);
+    window.create(fullscreenMode, "SFML GUI Driver" , sf::State::Fullscreen);
     sf::View windowView = window.getView();
     // zoom doesnt seem to work so have to do it manually
     windowView.setSize(sf::Vector2f(desiredSize));
@@ -83,13 +86,13 @@ int o2::main(sf::RenderWindow& window) {
     previewMapBackground.setTexture(&mapBackgroundTx);
 
     gui::Div previewDiv({ 864, 486 });
+    previewDiv.clickEnabled = true;
+    previewDiv.scrollable = true;
+    previewDiv.setPosition({ 48, 27 });
 
     o2::ScoreStats scoreStatsDiv(&previewDiv, { 864, 1836 });
     scoreStatsDiv.setPosition({0, 486 - 40});
     scoreStatsDiv.loadScores(testScoreData);
-
-    previewDiv.clickEnabled = true;
-    previewDiv.setPosition({48, 27});
 
     previewDiv.elements.push_back(&previewMapBackground);
     previewDiv.elements.push_back(&scoreStatsDiv);
@@ -104,19 +107,35 @@ int o2::main(sf::RenderWindow& window) {
     sf::RectangleShape buttonPanelBackground({ 408, 351 });
     buttonPanelBackground.setFillColor(sf::Color::Black);
 
+    o2::RateButton rateButton({ 173, 91 });
+    o2::ToggleButton flnButton("FLN", { 173, 91 });
+    o2::ToggleButton mirrorButton("Mirror", { 173, 91 });
+    o2::ToggleButton randomButton("Random", { 173, 91 });
+    // These buttons arent necessarily toggles but scene will change so their state will get wiped anyways
+    o2::ToggleButton backButton("Back", { 173, 91 });
+    o2::ToggleButton inventoryButton("Inventory", { 173, 91 });
+
+    rateButton.setPosition({20, 17});
+    flnButton.setPosition({214, 17});
+    mirrorButton.setPosition({20, 126 });
+    randomButton.setPosition({214, 126});
+    backButton.setPosition({20, 235});
+    inventoryButton.setPosition({214, 235});
+
     gui::Div buttonPanelDiv({ 408, 351 });
     buttonPanelDiv.setPosition({48, 702});
 
     buttonPanelDiv.elements.push_back(&buttonPanelBackground);
+    buttonPanelDiv.elements.push_back(&rateButton);
+    buttonPanelDiv.elements.push_back(&flnButton);
+    buttonPanelDiv.elements.push_back(&mirrorButton);
+    buttonPanelDiv.elements.push_back(&randomButton);
+    buttonPanelDiv.elements.push_back(&backButton);
+    buttonPanelDiv.elements.push_back(&inventoryButton);
 
     /////////////////////////// LOADOUT PANEL /////////////////////////// (0.275, 0.65) (0.2125, 0.325)
-    sf::RectangleShape loadoutBackground({ 408, 351 });
-    loadoutBackground.setFillColor(sf::Color::Black);
-
-    gui::Div loadoutDiv({ 408, 351 });
+    o2::LoadoutDiv loadoutDiv({ 408, 351 });
     loadoutDiv.setPosition({ 504, 702 });
-
-    loadoutDiv.elements.push_back(&loadoutBackground);
 
     /////////////////////////// SONG SELECT /////////////////////////// (0.5, 0.075) (0.475, 0.9)
     sf::RectangleShape songSelectBackground({912, 972});
@@ -128,19 +147,12 @@ int o2::main(sf::RenderWindow& window) {
     songSelectDiv.elements.push_back(&songSelectBackground);
 
     /////////////////////////// SEARCH BAR /////////////////////////// (0.5, 0.025) (0.475, 0.05)
-    //sf::RectangleShape searchBarBackground({ 912, 54 });
-    //searchBarBackground.setFillColor(sf::Color(64, 64, 64));
-
-    //gui::Div searchBarDiv({ 912, 54 });
-    //searchBarDiv.setPosition({ 960, 27 });
-
-    //searchBarDiv.elements.push_back(&searchBarBackground);
-
     o2::SearchBar searchBar({ 912, 54 });
     searchBar.setPosition({ 960, 27 });
     
     o2::KeyModeDropDownButton keyModeSelector({ 100, 54 });
     keyModeSelector.setPosition({960 + 912 - 100, 27});
+
 
     while (window.isOpen()) {
         while (const std::optional event = window.pollEvent()) {
@@ -155,10 +167,11 @@ int o2::main(sf::RenderWindow& window) {
                 keyModeSelector.click(clickCoords, mouseButtonPressed->button);
             }
             else if (const auto* mouseButtonReleased = event->getIf<sf::Event::MouseButtonReleased>()) {
-                sf::Vector2f coords = sf::Vector2f(sf::Mouse::getPosition(window));
+                sf::Vector2f coords = window.mapPixelToCoords(sf::Mouse::getPosition(window));
                 // releaseClicks
                 searchBar.releaseClick(coords, mouseButtonReleased->button);
                 keyModeSelector.releaseClick(coords, mouseButtonReleased->button);
+                buttonPanelDiv.releaseClick(coords, mouseButtonReleased->button);
             }
             else if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>()) {
                 if (keyPressed->scancode == sf::Keyboard::Scan::Escape) {
@@ -166,7 +179,8 @@ int o2::main(sf::RenderWindow& window) {
                 }
             }
             else if (const auto* mouseWheelScrolled = event->getIf<sf::Event::MouseWheelScrolled>()) {
-                scoreStatsDiv.scroll(mouseWheelScrolled->delta);
+                sf::Vector2f coords = window.mapPixelToCoords(mouseWheelScrolled->position);
+                previewDiv.scroll(coords, mouseWheelScrolled->delta);
             }
         }
 

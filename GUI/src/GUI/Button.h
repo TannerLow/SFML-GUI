@@ -13,6 +13,8 @@ public:
 	Div* div = nullptr;
 	bool isToggle = false;
 
+	~Button();
+
 	bool isDepressed() const;
 
 protected:

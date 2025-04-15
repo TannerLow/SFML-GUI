@@ -2,6 +2,12 @@
 
 namespace gui {
 
+Button::~Button() {
+	if (div) {
+		delete div;
+	}
+}
+
 bool Button::isDepressed() const {
 	return isDown;
 }

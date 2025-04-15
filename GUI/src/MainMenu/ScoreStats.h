@@ -34,7 +34,7 @@ public:
 
 	void loadScores(ScoreData scoreData);
 	virtual void update() override;
-	virtual void scroll(float delta) override;
+	virtual void scroll(sf::Vector2f mousePos, float delta) override;
 
 protected:
 	void slide();

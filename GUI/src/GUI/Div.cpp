@@ -116,6 +116,20 @@ void Div::handleHover(sf::Vector2f mousePos) {
 	}
 }
 
+void Div::scroll(sf::Vector2f mousePos, float delta) {
+	if (scrollable) {
+		if (visiblyContains(mousePos)) {
+			sf::Vector2f relativeMousePos = getInverseTransform().transformPoint(mousePos);
+			for (auto& element : elements) {
+				Clickable* clickable = dynamic_cast<Clickable*>(element);
+				if (clickable) {
+					clickable->scroll(relativeMousePos, delta);
+				}
+			}
+		}
+	}
+}
+
 void Div::setVisibleWindow(sf::IntRect window) {
 	sf::View view = renderTexture.getView();
 	view.setScissor({ sf::Vector2f(window.position).componentWiseDiv(view.getSize()), sf::Vector2f(window.size).componentWiseDiv(view.getSize()) });

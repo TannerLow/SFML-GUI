@@ -65,8 +65,7 @@ void ScoreStats::update() {
 	}
 }
 
-void ScoreStats::scroll(float delta) {
-	std::cout << "scrolled div " << delta << std::endl;
+void ScoreStats::scroll(sf::Vector2f mousePos, float delta) {
 	if (delta > 0) { // up
 		if (getPosition().y < (486 - 40)) {
 			move({ 0, 10 });
@@ -80,7 +79,7 @@ void ScoreStats::scroll(float delta) {
 		if (bottomTextY > (486 - 40)) {
 			move({ 0, -10 });
 			if (bottomTextY + getPosition().y < (486 - 40)) {
-				setPosition({ 0, 486 - bottomTextY - 40});
+				setPosition({ 0, 486 - bottomTextY - 40 });
 			}
 		}
 	}

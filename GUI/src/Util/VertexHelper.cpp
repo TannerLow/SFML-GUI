@@ -5,10 +5,10 @@ void vh::updateQuadTexture(sf::Vertex* vertex, const sf::IntRect texCoords) {
     const sf::Vector2i& size = texCoords.size;
     vertex[0].texCoords = sf::Vector2f(pos.x, pos.y);
     vertex[1].texCoords = sf::Vector2f(pos.x + size.x, pos.y);
-    vertex[2].texCoords = sf::Vector2f(pos.x, pos.y + size.y);
-    vertex[3].texCoords = sf::Vector2f(pos.x, pos.y + size.y);
+    vertex[2].texCoords = sf::Vector2f(pos.x, pos.y + size.y - 0.25f);
+    vertex[3].texCoords = sf::Vector2f(pos.x, pos.y + size.y - 0.25f);
     vertex[4].texCoords = sf::Vector2f(pos.x + size.x, pos.y);
-    vertex[5].texCoords = sf::Vector2f(pos.x + size.x, pos.y + size.y);
+    vertex[5].texCoords = sf::Vector2f(pos.x + size.x, pos.y + size.y - 0.25f);
 }
 
 void vh::positionQuad(sf::Vertex* vertex, const sf::FloatRect rect) {

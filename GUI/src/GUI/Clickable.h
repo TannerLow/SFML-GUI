@@ -12,6 +12,7 @@ public:
 	bool clickEnabled = false;
 	bool draggable = false;
 	bool hoverable = false;
+	bool scrollable = false;
 	bool dragLockedX = false;
 	bool dragLockedY = false;
 	float dragMinX = -1e7;
@@ -22,7 +23,7 @@ public:
 	virtual void click(sf::Vector2f mousePos, sf::Mouse::Button button) = 0;
 	virtual void releaseClick(sf::Vector2f mousePos, sf::Mouse::Button button) {}
 	virtual void handleHover(sf::Vector2f mousePos) {}
-	virtual void scroll(float delta) {};
+	virtual void scroll(sf::Vector2f mousePos, float delta) {};
 	virtual void update() {}
 };
 
