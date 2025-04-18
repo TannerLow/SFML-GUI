@@ -175,6 +175,7 @@
     <ClCompile Include="src\MainMenu\ScoreStats.cpp" />
     <ClCompile Include="src\MainMenu\SearchBar.cpp" />
     <ClCompile Include="src\MainMenu\SimpleButton.cpp" />
+    <ClCompile Include="src\MainMenu\SongSelect.cpp" />
     <ClCompile Include="src\MainMenu\ToggleButton.cpp" />
     <ClCompile Include="src\MinecraftUnicodeFont.cpp" />
     <ClCompile Include="src\TestButton.cpp" />
@@ -208,6 +209,7 @@
     <ClInclude Include="src\MainMenu\SearchBar.h" />
     <ClInclude Include="src\MainMenu\SimpleButton.h" />
     <ClInclude Include="src\MainMenu\SlideDirection.h" />
+    <ClInclude Include="src\MainMenu\SongSelect.h" />
     <ClInclude Include="src\MainMenu\ToggleButton.h" />
     <ClInclude Include="src\MinecraftUnicodeFont.h" />
     <ClInclude Include="src\TestButton.h" />

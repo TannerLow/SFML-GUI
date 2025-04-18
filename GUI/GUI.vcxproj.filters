@@ -93,6 +93,9 @@
     <ClCompile Include="src\MainMenu\LoadoutDiv.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\MainMenu\SongSelect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\GUI\Div.h">
@@ -186,6 +189,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\MainMenu\LoadoutDiv.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MainMenu\SongSelect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

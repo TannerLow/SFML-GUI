@@ -3,8 +3,8 @@
 
 namespace gui {
 
-ScrollBarButton::ScrollBarButton(sf::Vector2u size, ScrollSide side, sf::Vector2f bounds, sf::IntRect visibleWindow, sf::ContextSettings settings) {
-	div = new gui::Div(size, visibleWindow, settings);
+ScrollBarButton::ScrollBarButton(sf::Vector2f size, ScrollSide side, sf::Vector2f bounds, sf::IntRect visibleWindow, sf::ContextSettings settings) {
+	div = new gui::Div(sf::Vector2u(size), visibleWindow, settings);
 	clickEnabled = true;
 	hoverable = true;
 	draggable = true;
@@ -21,7 +21,7 @@ ScrollBarButton::ScrollBarButton(sf::Vector2u size, ScrollSide side, sf::Vector2
 		dragLockedX = true;
 	}
 
-	buttonGfx.setSize(sf::Vector2f(size));
+	buttonGfx.setSize(size);
 	buttonGfx.setFillColor(sf::Color::Cyan);
 	div->elements.push_back(&buttonGfx);
 }

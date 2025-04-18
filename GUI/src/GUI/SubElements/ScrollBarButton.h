@@ -11,7 +11,7 @@ private:
 
 public:
 	ScrollBarButton(
-		sf::Vector2u size, 
+		sf::Vector2f size,
 		ScrollSide side, 
 		sf::Vector2f bounds, 
 		sf::IntRect visibleWindow = { {}, {} }, 

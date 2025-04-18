@@ -104,8 +104,7 @@ int main() {
     scrollEndButtonRight.setPosition({ scrollButton.getHighestPointOfBar(), 800 });
 
     sf::Font font;
-    if (!font.openFromFile("resources/RuneScape-Plain-12.ttf"))
-    {
+    if (!font.openFromFile("resources/RuneScape-Plain-12.ttf")) {
         std::cout << "Failed to load resources/RuneScape-Plain-12.ttf font file" << std::endl;
     }
     font.setSmooth(false);

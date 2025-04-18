@@ -11,6 +11,7 @@
 #include "MainMenu/ToggleButton.h"
 #include "MainMenu/RateButton.h"
 #include "MainMenu/LoadoutDiv.h"
+#include "MainMenu/SongSelect.h"
 
 #include <stdio.h>
 #include <iostream>
@@ -24,7 +25,7 @@ int o2::main(sf::RenderWindow& window) {
     auto x = sf::VideoMode::getFullscreenModes();
     sf::VideoMode fullscreenMode = sf::VideoMode::getFullscreenModes()[0]; // 12 for 1280x720
     sf::Vector2f desiredSize = {1920, 1080};
-    window.create(fullscreenMode, "SFML GUI Driver" , sf::State::Fullscreen);
+    window.create(fullscreenMode, "SFML GUI Driver", sf::State::Fullscreen);
     sf::View windowView = window.getView();
     // zoom doesnt seem to work so have to do it manually
     windowView.setSize(sf::Vector2f(desiredSize));
@@ -146,6 +147,9 @@ int o2::main(sf::RenderWindow& window) {
 
     songSelectDiv.elements.push_back(&songSelectBackground);
 
+    o2::SongSelect songSelect(90, 0.1f, 0.03f, { (int)(912 * 0.9f), (int)(972 * 0.9f) });
+    songSelect.setPosition({ 960 + 912 * 0.05f, 81 + 972 * 0.05f });
+
     /////////////////////////// SEARCH BAR /////////////////////////// (0.5, 0.025) (0.475, 0.05)
     o2::SearchBar searchBar({ 912, 54 });
     searchBar.setPosition({ 960, 27 });
@@ -165,6 +169,7 @@ int o2::main(sf::RenderWindow& window) {
                 previewDiv.click(clickCoords, mouseButtonPressed->button);
                 searchBar.click(clickCoords, mouseButtonPressed->button);
                 keyModeSelector.click(clickCoords, mouseButtonPressed->button);
+                songSelect.click(clickCoords, mouseButtonPressed->button);
             }
             else if (const auto* mouseButtonReleased = event->getIf<sf::Event::MouseButtonReleased>()) {
                 sf::Vector2f coords = window.mapPixelToCoords(sf::Mouse::getPosition(window));
@@ -172,6 +177,7 @@ int o2::main(sf::RenderWindow& window) {
                 searchBar.releaseClick(coords, mouseButtonReleased->button);
                 keyModeSelector.releaseClick(coords, mouseButtonReleased->button);
                 buttonPanelDiv.releaseClick(coords, mouseButtonReleased->button);
+                songSelect.releaseClick(coords, mouseButtonReleased->button);
             }
             else if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>()) {
                 if (keyPressed->scancode == sf::Keyboard::Scan::Escape) {
@@ -181,6 +187,7 @@ int o2::main(sf::RenderWindow& window) {
             else if (const auto* mouseWheelScrolled = event->getIf<sf::Event::MouseWheelScrolled>()) {
                 sf::Vector2f coords = window.mapPixelToCoords(mouseWheelScrolled->position);
                 previewDiv.scroll(coords, mouseWheelScrolled->delta);
+                songSelect.scroll(coords, mouseWheelScrolled->delta);
             }
         }
 
@@ -194,12 +201,14 @@ int o2::main(sf::RenderWindow& window) {
             }
             searchBar.handleHover(mousePos);
             keyModeSelector.handleHover(mousePos);
+            songSelect.handleHover(mousePos);
         }
 
         // updates
         scoreStatsDiv.update();
         searchBar.setKeyMode(keyModeSelector.getKeyMode());
         searchBar.update();
+        songSelect.update();
 
         if (fpsLimiter.isReady()) {
             window.clear();
@@ -212,6 +221,7 @@ int o2::main(sf::RenderWindow& window) {
             //window.draw(searchBarDiv);
             window.draw(searchBar);
             window.draw(keyModeSelector);
+            window.draw(songSelect);
             for (const auto globalDiv : globalDivs) {
                 if (globalDiv != nullptr) {
                     window.draw(*globalDiv);

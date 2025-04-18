@@ -116,6 +116,15 @@ void Div::handleHover(sf::Vector2f mousePos) {
 	}
 }
 
+void Div::update() {
+	for (auto& element : elements) {
+		Clickable* clickable = dynamic_cast<Clickable*>(element);
+		if (clickable) {
+			clickable->update();
+		}
+	}
+}
+
 void Div::scroll(sf::Vector2f mousePos, float delta) {
 	if (scrollable) {
 		if (visiblyContains(mousePos)) {
