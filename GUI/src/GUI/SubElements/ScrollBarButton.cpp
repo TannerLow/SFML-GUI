@@ -45,7 +45,8 @@ void ScrollBarButton::releaseClick(sf::Vector2f mousePos, sf::Mouse::Button butt
 
 void ScrollBarButton::handleHover(sf::Vector2f mousePos) {
 	if (hoverable and div) {
-		if (isDown or div->visiblyContains(getInverseTransform().transformPoint(mousePos))) {
+		auto relativeMousePos = getInverseTransform().transformPoint(mousePos);
+		if (isDown or div->visiblyContains(relativeMousePos)) {
 			buttonGfx.setFillColor(sf::Color::Magenta);
 		}
 		else {

@@ -24,8 +24,9 @@ int o2::main(sf::RenderWindow& window) {
 
     auto x = sf::VideoMode::getFullscreenModes();
     sf::VideoMode fullscreenMode = sf::VideoMode::getFullscreenModes()[0]; // 12 for 1280x720
+    //fullscreenMode = sf::VideoMode({1920, 540}); // for testing purposes
     sf::Vector2f desiredSize = {1920, 1080};
-    window.create(fullscreenMode, "SFML GUI Driver", sf::State::Fullscreen);
+    window.create(fullscreenMode, "SFML GUI Driver");// , sf::State::Fullscreen);
     sf::View windowView = window.getView();
     // zoom doesnt seem to work so have to do it manually
     windowView.setSize(sf::Vector2f(desiredSize));
@@ -192,7 +193,7 @@ int o2::main(sf::RenderWindow& window) {
         }
 
         if (window.hasFocus()) {
-            sf::Vector2f mousePos = sf::Vector2f(sf::Mouse::getPosition(window));
+            sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
             // hovers
             for (const auto globalDiv : globalDivs) {
                 if (globalDiv != nullptr) {
@@ -218,7 +219,6 @@ int o2::main(sf::RenderWindow& window) {
             window.draw(buttonPanelDiv);
             window.draw(loadoutDiv);
             window.draw(songSelectDiv);
-            //window.draw(searchBarDiv);
             window.draw(searchBar);
             window.draw(keyModeSelector);
             window.draw(songSelect);

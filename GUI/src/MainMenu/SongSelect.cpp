@@ -3,6 +3,8 @@
 #include "MainMenuGlobals.h"
 #include <cmath>
 
+#define TEMP_LISTINGS_COUNT 100
+
 namespace o2 {
 
 SongSelect::SongSelect(
@@ -17,10 +19,13 @@ SongSelect::SongSelect(
 	scrollable = true;
 	clickEnabled = true;
 	hoverable = true;
+	this->sizef = sf::Vector2f(size);
+	this->listingSpacing = listingSpacing;
+	this->scrollBarWidth = scrollBarWidth;
+	this->listingHeight = listingHeight;
 
 	listingUpdateLimiter.setLimit(60);
 
-	sf::Vector2f sizef = sf::Vector2f(size);
 	background.setFillColor(sf::Color(128, 128, 128));
 	background.setSize(sizef);
 
@@ -32,38 +37,12 @@ SongSelect::SongSelect(
 	for (int i = 0; i < maxListings; i++) {
 		//TEMP
 		index.push_back(i);
-
-		sf::FloatRect listingBgBounds;
-		listingBgBounds.size = sf::Vector2f({ sizef.x * (1.f - scrollBarWidth), (float)listingHeight });
-		listingBgBounds.position = { 0, listingHeight * i * (1.f + listingSpacing) };
-
-		sf::FloatRect listingMapBgBounds;
-		listingMapBgBounds.size = sf::Vector2f({ listingBgBounds.size.x * 0.4f, (float)listingHeight });
-		listingMapBgBounds.position = { listingBgBounds.size.x * 0.6f, listingHeight * i * (1.f + listingSpacing) };
-
-		size_t offset = i * 12;
-		vh::positionQuad(&listingVertices[offset], listingBgBounds);
-		vh::colorQuad(&listingVertices[offset], sf::Color::Black);
-		vh::positionQuad(&listingVertices[offset + 6], listingMapBgBounds);
-		vh::colorQuad(&listingVertices[offset + 6], sf::Color::Blue);
-
-		listingTexts[2 * i].setFont(minecraftFont);
-		listingTexts[2 * i].setString("Top Text");
-		listingTexts[2 * i].setPosition({
-			listingBgBounds.size.x * 0.05f + listingBgBounds.position.x,
-			listingBgBounds.size.y / 3.f - listingTexts[2 * i].getBoundingBox().size.y / 2.f + listingBgBounds.position.y
-		});
-		listingTexts[2 * i + 1].setFont(minecraftFont);
-		listingTexts[2 * i + 1].setString("Bottom Text");
-		listingTexts[2 * i + 1].setPosition({
-			listingBgBounds.size.x * 0.05f + listingBgBounds.position.x,
-			2.f * listingBgBounds.size.y / 3.f - listingTexts[2 * i].getBoundingBox().size.y / 2.f + listingBgBounds.position.y
-		});
 	}
+	updateListings();
 
 	viewCenterPos = renderTexture.getView().getCenter();
 	viewBounds.x = viewCenterPos.y;
-	viewBounds.y = listingHeight * maxListings * (1.f + listingSpacing) - viewCenterPos.y;
+	viewBounds.y = listingHeight * TEMP_LISTINGS_COUNT * (1.f + listingSpacing) - viewCenterPos.y;
 
 	scrollButton = new gui::ScrollBarButton(
 		{ sizef.x * scrollBarWidth, sizef.y * 0.05f },
@@ -93,14 +72,10 @@ SongSelect::SongSelect(
 
 	scrollButton->setPosition({ sizef.x - sizef.x * scrollBarWidth, sizef.x * scrollBarWidth });
 
-	//elements.push_back(&background);
 	elements.push_back(&listingVertices);
 	for (int i = 0; i < listingTexts.size(); i++) {
 		elements.push_back(&listingTexts[i]);
 	}
-	//elements.push_back(scrollEndButtonTop);
-	//elements.push_back(scrollEndButtonBottom);
-	//elements.push_back(scrollButton);
 }
 
 SongSelect::~SongSelect() {
@@ -119,11 +94,19 @@ void SongSelect::click(sf::Vector2f mousePos, sf::Mouse::Button button) {
 }
 
 void SongSelect::releaseClick(sf::Vector2f mousePos, sf::Mouse::Button button) {
+	sf::Vector2f relativeMousePos = getInverseTransform().transformPoint(mousePos);
 	if (scrollButton and scrollEndButtonBottom and scrollEndButtonTop) {
-		sf::Vector2f relativeMousePos = getInverseTransform().transformPoint(mousePos);
 		scrollButton->releaseClick(relativeMousePos, button);
 		scrollEndButtonBottom->releaseClick(relativeMousePos, button);
 		scrollEndButtonTop->releaseClick(relativeMousePos, button);
+	}
+
+	//relativeMousePos = renderTexture.getView().getInverseTransform().transformPoint(mousePos);
+	for (int i = 0; i < index.size(); i++) {
+		sf::Vector2f posWithView = { relativeMousePos.x, relativeMousePos.y + (viewCenterPos.y - viewBounds.x) };
+		if (vh::containedByQuad(&listingVertices[i * 12], posWithView)) {
+			printf("Clicked listing: %d\n", index[i]);
+		}
 	}
 }
 
@@ -153,33 +136,47 @@ void SongSelect::adjustScrollBarPosition() {
 
 void SongSelect::moveView(float delta) {
 	viewCenterPos.y += delta;
-	viewCenterPos.y = std::max(viewCenterPos.y, viewBounds.x);
 	viewCenterPos.y = std::min(viewCenterPos.y, viewBounds.y);
+	viewCenterPos.y = std::max(viewCenterPos.y, viewBounds.x);
 	
-	sf::View view = renderTexture.getView();
-	view.setCenter(viewCenterPos);
-	renderTexture.setView(view);
+	updateView();
 	adjustScrollBarPosition();
 }
 
-void SongSelect::setViewPosByPercent(float percent) {
-	//sf::View view = renderTexture.getView();
-	//float oldY = view.getCenter().y;
-	//float newY = percent * (viewBounds.y - viewBounds.x) + viewBounds.x;
-	//if (newY != oldY) {
-	//	view.setCenter({ view.getCenter().x, newY });
-	//	adjustFixedPositionElements(newY - oldY);
-	//	renderTexture.setView(view);
-	//}
+void SongSelect::updateView() {
+	sf::View view = renderTexture.getView();
+	view.setCenter(viewCenterPos);
+	renderTexture.setView(view);
 
+	// i use a loop here to keep updating the listings until no longer needed
+	// this is needed for when user scrolls fast
+	while (true) {
+		size_t leastIndex = getIndexOfLeastIndex();
+		float lowY = listingVertices[leastIndex * 12].position.y;
+
+		size_t greatestIndex = getIndexOfGreatestIndex();
+		float highY = listingVertices[greatestIndex * 12 + 5].position.y;
+
+		if (index[leastIndex] > 0 and viewCenterPos.y - lowY < 700) {
+			index[greatestIndex] = index[leastIndex] - 1;
+		}
+		else if (index[greatestIndex] < TEMP_LISTINGS_COUNT and highY - viewCenterPos.y < 700) {
+			index[leastIndex] = index[greatestIndex] + 1;
+		}
+		else {
+			break;
+		}
+		updateListings();
+	}
+}
+
+void SongSelect::setViewPosByPercent(float percent) {
 	percent = std::max(0.f, percent);
 	percent = std::min(1.f, percent);
 
 	viewCenterPos.y = viewBounds.x + percent * (viewBounds.y - viewBounds.x);
 
-	sf::View view = renderTexture.getView();
-	view.setCenter(viewCenterPos);
-	renderTexture.setView(view);
+	updateView();
 	adjustScrollBarPosition();
 }
 
@@ -207,6 +204,63 @@ void SongSelect::update() {
 			float percent = scrollButton->getScrollPercentage();
 			setViewPosByPercent(percent);
 		}
+	}
+}
+
+size_t SongSelect::getIndexOfLeastIndex() const {
+	int least = 0x0FFFFFFF; // arbitrary large number
+	size_t leastIndex = 0;
+	for (int i = 0; i < index.size(); i++) {
+		if (index[i] < least) {
+			least = index[i];
+			leastIndex = i;
+		}
+	}
+	return leastIndex;
+}
+
+size_t SongSelect::getIndexOfGreatestIndex() const {
+	int greatest = -100; // arbitrary small number
+	size_t greatestIndex = 0;
+	for (int i = 0; i < index.size(); i++) {
+		if (index[i] > greatest) {
+			greatest = index[i];
+			greatestIndex = i;
+		}
+	}
+	return greatestIndex;
+}
+
+void SongSelect::updateListings() {
+	for (int j = 0; j < index.size(); j++) {
+		int i = index[j];
+
+		sf::FloatRect listingBgBounds;
+		listingBgBounds.size = sf::Vector2f({ sizef.x * (1.f - scrollBarWidth), (float)listingHeight });
+		listingBgBounds.position = { 0, listingHeight * i * (1.f + listingSpacing) };
+
+		sf::FloatRect listingMapBgBounds;
+		listingMapBgBounds.size = sf::Vector2f({ listingBgBounds.size.x * 0.4f, (float)listingHeight });
+		listingMapBgBounds.position = { listingBgBounds.size.x * 0.6f, listingHeight * i * (1.f + listingSpacing) };
+
+		size_t offset = j * 12;
+		vh::positionQuad(&listingVertices[offset], listingBgBounds);
+		vh::colorQuad(&listingVertices[offset], sf::Color::Black);
+		vh::positionQuad(&listingVertices[offset + 6], listingMapBgBounds);
+		vh::colorQuad(&listingVertices[offset + 6], sf::Color::Blue);
+
+		listingTexts[2 * j].setFont(minecraftFont);
+		listingTexts[2 * j].setString("Top Text " + std::to_string(i));
+		listingTexts[2 * j].setPosition({
+			listingBgBounds.size.x * 0.05f + listingBgBounds.position.x,
+			listingBgBounds.size.y / 3.f - listingTexts[2 * j].getBoundingBox().size.y / 2.f + listingBgBounds.position.y
+			});
+		listingTexts[2 * j + 1].setFont(minecraftFont);
+		listingTexts[2 * j + 1].setString("Bottom Text");
+		listingTexts[2 * j + 1].setPosition({
+			listingBgBounds.size.x * 0.05f + listingBgBounds.position.x,
+			2.f * listingBgBounds.size.y / 3.f - listingTexts[2 * j].getBoundingBox().size.y / 2.f + listingBgBounds.position.y
+			});
 	}
 }
 

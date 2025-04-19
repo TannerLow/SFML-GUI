@@ -28,3 +28,8 @@ void vh::colorQuad(sf::Vertex* vertex, const sf::Color color) {
     }
 }
 
+bool vh::containedByQuad(const sf::Vertex* vertex, const sf::Vector2f point) {
+    return vertex[0].position.x <= point.x and point.x <= vertex[5].position.x and
+           vertex[0].position.y <= point.y and point.y <= vertex[5].position.y;
+}
+
